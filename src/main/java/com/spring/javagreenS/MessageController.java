@@ -88,6 +88,46 @@ public class MessageController {
 			model.addAttribute("msg", "파일 업로드에 실패했습니다.");
 			model.addAttribute("url", "study/fileUpload/fileUpload");
 		}
+		else if(msgFlag.equals("levelMemberNo")) {
+			model.addAttribute("msg", "로그인 후 이용하세요.");
+			model.addAttribute("url", "member/memLogin");
+		}
+		else if(msgFlag.equals("levelConfirmNo")) {
+			model.addAttribute("msg", "현재 등급으로는 사용하실 수 없습니다.");
+			model.addAttribute("url", "member/memMain");
+		}
+		else if(msgFlag.equals("memPwdCheckNo")) {
+			model.addAttribute("msg", "비밀번호가 일치하지 않습니다.");
+			model.addAttribute("url", "member/memPwdCheck");
+		}
+		else if(msgFlag.equals("memUpdateOk")) {
+			model.addAttribute("msg", "회원정보가 수정되었습니다.");
+			model.addAttribute("url", "member/memMain");
+		}
+		else if(msgFlag.equals("memUpdateNo")) {
+			model.addAttribute("msg", "회원정보 수정 실패.");
+			model.addAttribute("url", "member/memPwdCheck");
+		}
+		else if(msgFlag.equals("memNickCheckNo2")) {
+			model.addAttribute("msg", "중복된 닉네임입니다.");
+			model.addAttribute("url", "member/memPwdCheck");
+		}
+		else if(msgFlag.equals("memDeleteOk")) {
+			model.addAttribute("msg", mid+"님 탈퇴처리 완료되었습니다. \\n같은 아이디로 1개월동안 다시 가입하실 수 없습니다.");
+			model.addAttribute("url", "/");
+		}
+		else if(msgFlag.equals("memIdPwdSearchNo")) {
+			model.addAttribute("msg", "입력하신 정보와 일치하는 회원이 없습니다.");
+			model.addAttribute("url", "member/memIdPwdSearch");
+		}
+		else if(msgFlag.equals("memPwdSendOk")) {
+			model.addAttribute("msg", "임시비밀번호가 발급되었습니다. \\n입력하신 메일에서 확인하세요.");
+			model.addAttribute("url", "member/memLogin");
+		}
+		else if(msgFlag.equals("memPwdSendNo")) {
+			model.addAttribute("msg", "임시비밀번호 발급실패.");
+			model.addAttribute("url", "member/memIdPwdSearch");
+		}
 		
 		return "include/message";
 	}

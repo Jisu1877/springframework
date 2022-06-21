@@ -4,13 +4,6 @@
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/functions" prefix="fn" %>
 
-<%-- <%
-	String hobby_ = (String)request.getAttribute("hobby");
-
-	//취미
-	String[] hobbys = hobby_.split("/");
-	String[] hobby = {"등산", "낚시", "수영", "독서", "영화감상", "바둑", "축구", "기타"};
-%> --%>
 <c:set var="ctp" value="${pageContext.request.contextPath}"/>
 <!DOCTYPE html>
 <html>
@@ -84,6 +77,10 @@
 		    	submitFlag = 1;
 		    }
 		}
+		else {
+			submitFlag = 1;
+		}
+        
 		if(tel2 != "" || tel3 != "") {
 			if(!regTel.test(tel)) {
 		        alert("전화번호 형식에 맞지않습니다.(000-0000-0000)");
@@ -96,18 +93,14 @@
 	    }
 		
 		//전송 전에 주소를 하나로 묶어서 전송처리 준비한다.
-		let postcode = myForm.postcode.value + " ";
-		let roadAddress = myForm.roadAddress.value  + " ";
-		let detailAddress = myForm.detailAddress.value  + " ";
-		let extraAddress = myForm.extraAddress.value + " ";
+		let postcode = myForm.postcode.value;
+		let roadAddress = myForm.roadAddress.value;
+		let detailAddress = myForm.detailAddress.value;
+		let extraAddress = myForm.extraAddress.value;
 		myForm.address.value = postcode + "/" + roadAddress + "/" + detailAddress + "/" + extraAddress + "/";
 			
 		//전송 전에 파일에 관한 사항 체크
-		if(fName.trim() == "") {
-			myForm.photo.value = "noimage";
-			submitFlag = 1;
-		}
-		else {
+		if(fName.trim() != "") {
 			let fileSize = document.getElementById("file").files[0].size;  //첫번째 파일의 사이즈..! 아이디를 예약어인 file 로 주기.
 		
 			if(uExt != "JPG" && uExt != "GIF" && uExt != "PNG") {
@@ -144,19 +137,38 @@
 			alert("회원가입 실패~~");
 		}
   	}
+  	
   	//닉네임 중복체크
   	function nickCheck() {
-		let nickName = myForm.nickName.value;
-		let url = "${ctp}/memNickCheck.mem?nickName="+nickName;
-		
-		if(nickName == "") {
-			alert("닉네임을 입력하세요");
+  		let nickName = $("#nickName").val();
+  		if(nickName == "" || $("#nickName").val().length < 2 || $("#nickName").val().length >= 20) {
+			alert("닉네임를 확인하세요.(닉네임은 2~20자 이내로 입력)");
 			myForm.nickName.focus();
+			return false;
 		}
-		else {
-			nickCheckSw = 1;
-			window.open(url, "nWin", "width=500px,height=250px");
-		}
+  		if(nickName == '${sNickName}') {
+  			nickCheckSw = 1;
+  			return false;
+  		}
+  		
+  		$.ajax({
+  			type: "post",
+  			url : "${ctp}/member/nickNameCheck",
+  			data : {nickName : nickName},
+  			success : function(res) {
+				if(res == "1") {
+					alert("이미 사용중인 닉네임 입니다.");
+					$("#nickName").focus();
+				}
+				else {
+					alert("사용 가능한 닉네임 입니다.");
+					nickCheckSw = 1;
+				}
+			},
+			error : function () {
+				alert("전송오류.");
+			}
+  		});
 	}
   </script>
 </head>
@@ -164,8 +176,8 @@
 <jsp:include page="/WEB-INF/views/include/nav.jsp" />
 <jsp:include page="/WEB-INF/views/include/slide2.jsp" />
 <div class="container" style="padding:30px">
-  <form name="myForm" method="post" action="${ctp}/memUpdateOk.mem" class="was-validated">
-    <h2 class="text-center">회 원 가 입</h2>
+  <form name="myForm" method="post" action="${ctp}/member/memUpdateOk" class="was-validated" enctype="Multipart/form-data">
+    <h2 class="text-center">회 원 정 보 수 정</h2>
     <br/>
     <div class="form-group">
       <label for="mid">아이디 : &nbsp; &nbsp;</label>
@@ -175,13 +187,12 @@
     </div>
     <div class="form-group">
       <label for="pwd">비밀번호 :</label>
-      <input type="password" class="form-control" id="pwd" name="pwd" required autofocus/>
-      <div class="invalid-feedback">회원정보를 수정하려면 회원비밀번호를 정확히 입력하셔야 합니다. </div>
+      <input type="password" class="form-control" value="${vo.pwd}" id="pwd" name="pwd" required autofocus/>
     </div>
     <div class="form-group">
       <label for="nickname">닉네임 : &nbsp; &nbsp;</label>
       <div class="input-group mb-3">
-	      <input type="text" class="form-control" id="nickName" value="${sNickName}" name="nickName" required />
+	      <input type="text" class="form-control" id="nickName" value="${vo.nickName}" name="nickName" required />
 	      <div class="input-group-append">
 	      	<input type="button" value="닉네임 중복체크" class="btn btn-success" onclick="nickCheck()"/>
 	      </div>
@@ -194,6 +205,9 @@
       <div class="invalid-feedback">성명은 필수 입력사항입니다. <br> '한글'과 '영문 대소문자'로만 작성하세요. </div>
     </div>
     <div class="form-group">
+      <c:set var="emails" value="${fn:split(vo.email,'@')}"/>
+      <c:set var="email1" value="${emails[0]}"/>
+      <c:set var="email2" value="${emails[1]}"/>
       <label for="email">Email address:</label>
 		<div class="input-group mb-3">
 		  <input type="text" class="form-control" value="${email1}" id="email1" name="email1" required />
@@ -227,13 +241,15 @@
     </div>
     <div class="form-group">
       <label for="birthday">생일</label>
-      <%-- <c:set var="now" value="<%=new java.util.Date()%>"></c:set>	
-      <fmt:formatDate value="${now}" pattern="yyyy-MM-dd"/> --%>
-	  <input type="date" name="birthday" class="form-control" value="${birthday}"/>
+	  <input type="date" name="birthday" class="form-control" value="${fn:substring(vo.birthday,0,10)}"/>
     </div>
     <div class="form-group">
       <div class="input-group mb-3">
 	      <div class="input-group-prepend">
+	      	  <c:set var="tels" value="${fn:split(vo.tel,'-')}"/>
+		      <c:set var="tel1" value="${tels[0]}"/>
+		      <c:set var="tel2" value="${tels[1]}"/>
+		      <c:set var="tel3" value="${tels[2]}"/>
 	        <span class="input-group-text">전화번호 :</span> &nbsp;&nbsp;
 			      <select name="tel1" class="custom-select">
 				    <option value="010" ${tel1=="010" ? selected : ""}>010</option>
@@ -254,18 +270,23 @@
 	    </div> 
     </div>
     <div class="form-group">
+    <c:set var="address4" value="${fn:split(vo.address,'/')}"/>
+	<c:set var="address0" value="${address4[0]}"/>
+	<c:set var="address1" value="${address4[1]}"/>
+	<c:set var="address2" value="${address4[2]}"/>
+	<c:set var="address3" value="${address4[3]}"/>
       <label for="address">주소</label><br>
 			<div class="input-group mb-1">
-				<input type="text" name="postcode" id="sample6_postcode" value="${postcode}" placeholder="우편번호" class="form-control">
+				<input type="text" name="postcode" id="sample6_postcode" value="${address0}" placeholder="우편번호" class="form-control">
 				<div class="input-group-append">
 					<input type="button" onclick="sample6_execDaumPostcode()" value="우편번호 찾기" class="btn btn-success">
 				</div>
 			</div>
-			<input type="text" name="roadAddress" id="sample6_address" value="${roadAddress}"  size="50" placeholder="주소" class="form-control mb-1">
+			<input type="text" name="roadAddress" id="sample6_address" value="${address1}"  size="50" placeholder="주소" class="form-control mb-1">
 			<div class="input-group mb-1">
-				<input type="text" name="detailAddress" id="sample6_detailAddress" value="${detailAddress}"  placeholder="상세주소" class="form-control"> &nbsp;&nbsp;
+				<input type="text" name="detailAddress" id="sample6_detailAddress" value="${address2}"  placeholder="상세주소" class="form-control"> &nbsp;&nbsp;
 				<div class="input-group-append">
-					<input type="text" name="extraAddress" id="sample6_extraAddress" value="${extraAddress}" placeholder="참고항목" class="form-control">
+					<input type="text" name="extraAddress" id="sample6_extraAddress" value="${address3}" placeholder="참고항목" class="form-control">
 				</div>
 			</div>
     </div>
@@ -331,22 +352,6 @@
 			  </label>
 			</div>
 		</div>
-<%--          취미 :
-<% 			for(int i=0; i<hobby.length; i++) { %>
-				<input type="checkbox" name="hobby" value="<%=hobby[i] %>"
-<%
-				for(int j=0; j<hobbys.length; j++) {
-					if(hobby[i].equals(hobbys[j])) {
-%>
-					checked
-<%
-					break;
-					}
-				}
-%>
-				/><%=hobby[i] %>
-<%			} %>
-	<p></p> --%>
     <div class="form-group">
       <label for="content">자기소개</label>
       <textarea rows="5" class="form-control" id="content" name="content">${vo.content}</textarea>
@@ -365,13 +370,13 @@
 			</div>
     </div>
     <div  class="form-group">
-      회원 사진(파일용량:2MByte이내) : <img src="${ctp}/data/member/${vo.photo}" width="80px"/>
+      회원 사진(파일용량:2MByte이내) : <img src="${ctp}/member/${vo.photo}" width="80px"/>
       <input type="file" name="fName" id="file" class="form-control-file border"/>
     </div>
     <button type="button" class="btn btn-primary" onclick="fCheck()">회원정보 수정</button>
     <button type="reset" class="btn btn-secondary">다시작성</button>
-    <button type="button" class="btn btn-secondary" onclick="location.href='${ctp}/';">돌아가기</button>
-  	<input type="hidden" name="photo"/>
+    <button type="button" class="btn btn-secondary" onclick="location.href='memMain';">돌아가기</button>
+  	<input type="hidden" name="photo" value="${vo.photo}"/>
   	<input type="hidden" name="address"/>
   	<input type="hidden" name="email"/>
   	<input type="hidden" name="tel"/>

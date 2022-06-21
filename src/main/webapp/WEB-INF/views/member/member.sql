@@ -29,6 +29,8 @@ create table member2 (
 
 desc member;
 
+select count(*) from member2;
+
 insert into member2 values(default, 'admin', '1234', '관리맨', '관리자', default, default, '010-9039-1877', '진천군 진광로121 이월부영아파트 101동 403호', 'ljs1877@gmail.com', 'http://blog.daum.net/cjsk1126', '프리랜서', '등산/수영', default, '관리자입니다.', default, default, default, default, default, default, default, default);
 
 select * from member2;

@@ -11,11 +11,39 @@
 		select * from member2 where nickName = #{nickName};
 	</select>
 	
+	<select id="getMemList" resultType="com.spring.javagreenS.vo.MemberVO">
+		select * from member2 order by idx desc limit #{start}, #{end};
+	</select>
+	
+	<select id="getMemInfor" resultType="com.spring.javagreenS.vo.MemberVO">
+		select * from member2 where mid = #{mid};
+	</select>
+	
+	<select id="getMemIdEmailCheck" resultType="com.spring.javagreenS.vo.MemberVO">
+		select * from member2 where mid = #{mid} and email = #{toMail};
+	</select>
+	
+	<select id="totRecCnt" resultType="int">
+		select count(*) from member2;
+	</select>
+	
 	<insert id="setMemInputOk">
 		insert into member2 values (default, #{vo.mid}, #{vo.pwd}, #{vo.nickName}, #{vo.name}, #{vo.gender}, #{vo.birthday}, #{vo.tel}, #{vo.address}, #{vo.email}, #{vo.homePage}, #{vo.job}, #{vo.hobby}, #{vo.photo}, #{vo.content}, #{vo.userInfor}, default, default, default, default, default, default, default);
 	</insert>
 	
 	<update id="setMemLoginUpdate">
 		update member2 set visitCnt = visitCnt + 1, todayCnt = #{todayCnt}, point = point + #{newPoint}, lastDate = now() where mid = #{mid};
+	</update>
+	
+	<update id="setMemUpdateOk">
+		update member2 set pwd = #{vo.pwd}, nickName = #{vo.nickName}, name = #{vo.name}, gender = #{vo.gender}, birthday = #{vo.birthday}, tel = #{vo.tel}, address = #{vo.address}, email = #{vo.email}, homePage = #{vo.homePage}, job = #{vo.job}, hobby = #{vo.hobby}, photo = #{vo.photo}, content = #{vo.content}  where mid = #{vo.mid};
+	</update>
+	
+	<update id="setMemDeleteOk">
+		update member2 set userDel = 'OK' where mid = #{mid}; 
+	</update>
+	
+	<update id="setPwdChange">
+		update member2 set pwd = #{pwd} where mid = #{mid};
 	</update>
 </mapper>

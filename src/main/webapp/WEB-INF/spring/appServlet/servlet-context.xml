@@ -16,6 +16,7 @@
 	<!-- <resources mapping="/resources/**" location="/resources/" /> -->
 	<resources mapping="/images/**" location="/resources/images/" />
 	<resources mapping="/js/**" location="/resources/js/" />
+	<resources mapping="/member/**" location="/resources/member/" />
 
 	<!-- Resolves views selected for rendering by @Controllers to .jsp resources in the /WEB-INF/views directory -->
 	<beans:bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -33,4 +34,37 @@
 		<beans:property name="maxUploadSize" value="10485760"/> <!-- 업로드파일의 최대용량을 10MByte로 제한 -->
 		<beans:property name="defaultEncoding" value="utf-8"/> <!-- 한글처리 -->
 	</beans:bean>
+	
+	<!-- Interceptor 설정 -->
+	<beans:bean id="otherInterceptor" class="com.spring.javagreenS.interceptor.OtherInterceptor"/> <!-- 0,1,2,3,4 -->
+	<beans:bean id="memberInterceptor" class="com.spring.javagreenS.interceptor.MemberInterceptor"/> <!-- 0,1,2,3,4 -->
+	<beans:bean id="boardInterceptor" class="com.spring.javagreenS.interceptor.BoardInterceptor"/> <!-- 0,1,2,3,4 -->
+	
+	<interceptors>
+		<interceptor>
+			<mapping path="/study/**"/>
+			<mapping path="/shop/**"/>
+			<beans:ref bean="otherInterceptor"/>
+		</interceptor>
+		<interceptor>
+			<mapping path="/member/**"/>
+			<exclude-mapping path="/member/memLogin"/>
+			<exclude-mapping path="/member/memLogout"/>
+			<exclude-mapping path="/member/memJoin"/>
+			<exclude-mapping path="/member/memIdCheck"/>
+			<exclude-mapping path="/member/nickNameCheck"/>
+			<exclude-mapping path="/member/memIdPwdSearch"/>
+			<exclude-mapping path="/member/memIdPwdSearchOk"/>
+			<beans:ref bean="memberInterceptor"/>
+		</interceptor>
+		<interceptor>
+			<mapping path="/board/**"/>
+			<mapping path="/member/memList"/>
+			<mapping path="/pds/pdsDownload"/>
+			<mapping path="/pds/pdsInfor"/>
+			<exclude-mapping path="/board/boardList"/>
+			<beans:ref bean="boardInterceptor"/>
+		</interceptor>
+	</interceptors>
+	
 </beans:beans>

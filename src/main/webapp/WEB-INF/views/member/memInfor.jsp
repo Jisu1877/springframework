@@ -11,10 +11,8 @@
     <jsp:include page="/WEB-INF/views/include/bs4.jsp" />
 </head>
 <body>
-<c:if test="${sLevel != 0}">
-	<jsp:include page="/WEB-INF/views/include/nav.jsp" />
+<jsp:include page="/WEB-INF/views/include/nav.jsp" />
 <jsp:include page="/WEB-INF/views/include/slide2.jsp" />
-</c:if>
 <p><br/><p>
 <div class="container">
     <h2 class="text-center">회원 정보 상세보기</h2>
@@ -32,12 +30,12 @@
   		<tr><td>직업 : ${vo.job}</td></tr>
   		<tr><td>취미 : ${vo.hobby}</td></tr>
   		<tr><td>자기소개 : <br>${fn:replace(vo.content, newLine, '<br/>')}</td></tr>
-  		<tr><td>등급 : ${vo.strLevel}</td></tr>
+  		<tr><td>등급 : ${sStrLevel}</td></tr>
   		<tr><td>총 방문횟수 : ${vo.visitCnt}</td></tr>
   		<tr><td>가입일 : ${vo.startDate}</td></tr>
   		<tr><td>최종방문일 : ${vo.lastDate}</td></tr>
   		<tr><td>오늘 방문횟수 : ${vo.todayCnt}</td></tr>
-  		<tr><td>사진 : <img src="data/member/${vo.photo}" width="100px"/></td></tr>
+  		<tr><td>사진 : <img src="${ctp}/member/${vo.photo}" width="100px"/></td></tr>
   	</table>
   	<hr>
   	<p>
@@ -45,8 +43,6 @@
   	</p>
 </div>
 	<p><br/><p>
-<c:if test="${sLevel != 0}">
 	<jsp:include page="/WEB-INF/views/include/footer.jsp" />
-</c:if>
 </body>
 </html>
