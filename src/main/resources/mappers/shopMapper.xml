@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.javagreenS.dao.ShopDAO">
+	<select id="getProduct1" resultType="com.spring.javagreenS.vo.ShopVO">
+		select * from goods1;
+	</select>
+
+	<select id="getProduct2" resultType="com.spring.javagreenS.vo.ShopVO">
+		select * from goods2 where product1 = #{product1};
+	</select>
+	
+	<select id="getProduct3" resultType="com.spring.javagreenS.vo.ShopVO">
+		select * from goods3 where product2 = #{product2};
+	</select>
+	
+	<select id="getProductList" resultType="com.spring.javagreenS.vo.ShopVO">
+		<if test="product == ''">
+			select * from product order by idx desc;
+		</if>
+		<if test="product != ''">
+			select * from product where product like concat('%', #{product}, '%') order by idx desc;
+		</if>
+	</select>
+	
+	<select id="searchProduct1List" resultType="com.spring.javagreenS.vo.ShopVO">
+		select * from product where product1 = #{vo.product1} order by idx desc;
+	</select>
+	
+	<select id="searchProduct2List" resultType="com.spring.javagreenS.vo.ShopVO">
+		select * from product where product1 = #{vo.product1} and product2 = #{vo.product2} order by idx desc;
+	</select>
+	
+	<select id="searchProduct3List" resultType="com.spring.javagreenS.vo.ShopVO">
+		select * from product where product1 = #{vo.product1} and product2 = #{vo.product2} and product3 = #{vo.product3} order by idx desc;
+	</select>
+	
+	<insert id="getProductInput">
+		insert into product values (default, #{vo.product1}, #{vo.product2}, #{vo.product3}, #{vo.product}, #{vo.price}, #{vo.title}, #{vo.content});
+	</insert>
+</mapper>

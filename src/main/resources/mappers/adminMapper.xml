@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.javagreenS.dao.AdminDAO">
+	<!-- keyValue 가져오기 -->
+	<select id="getKeyValue" resultType="String">
+		select keyValue from hashKey where keyIdx = #{random};
+	</select>
+	
+	<!-- idxKey값 가져오기 -->
+	<select id="getIdxKey" resultType="com.spring.javagreenS.vo.AdminTestVO">
+		select * from adminTest where mid = #{mid};
+	</select>
+	
+	<!-- 관리자등록 -->
+	<insert id="setAdminInput">
+		insert into adminTest values(#{vo.mid}, #{vo.name}, #{strPwd}, #{random});
+	</insert>
+	
+</mapper>

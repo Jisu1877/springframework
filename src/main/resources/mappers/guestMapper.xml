@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.spring.javagreenS.dao.GuestDAO">
+	<!-- 방명록 목록 가져오기 -->
+	<select id="getGuestList" resultType="com.spring.javagreenS.vo.GuestVO">
+		select * from guest2 order by idx desc limit #{startIndexNo}, #{pageSize};
+	</select>
+	<!-- 방명록 글 개수 가져오기 -->
+	<select id="totRecCnt" resultType="int">
+		select count(*) from guest2;
+	</select>
+	
+	<!-- 방명록 등록하기 -->
+	<insert id="setGuestInput">
+		insert into guest2 values(default, #{vo.name}, #{vo.email}, #{vo.homepage}, default, #{vo.hostIp}, #{vo.content});
+	</insert>
+</mapper>
