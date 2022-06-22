@@ -63,7 +63,6 @@
 		  <c:if test="${pageVO.pag != pageVO.totPage}">
 			 <li class="page-item"><a class="page-link text-secondary" href="memList?pag=${pageVO.totPage}">▷▷</a></li>
 		  </c:if> 
-		  
 		 </ul>
 	</div>
 <!-- 블록 페이징 처리 끝 --> 

@@ -16,7 +16,7 @@
     <a href="${ctp}/" class="w3-bar-item w3-button w3-padding-large">HOME</a>
     <a href="${ctp}/guest/guestList" class="w3-bar-item w3-button w3-padding-large w3-hide-small">GUEST</a>
     <c:if test="${sLevel <= 4}">
-	    <a href="#tour" class="w3-bar-item w3-button w3-padding-large w3-hide-small">BOARD</a>
+	    <a href="${ctp}/board/boList" class="w3-bar-item w3-button w3-padding-large w3-hide-small">BOARD</a>
 	    <a href="#contact" class="w3-bar-item w3-button w3-padding-large w3-hide-small">PDS</a>
 	    <div class="w3-dropdown-hover w3-hide-small">
 	      <button class="w3-padding-large w3-button" title="More">STUDY1 <i class="fa fa-caret-down"></i></button>     

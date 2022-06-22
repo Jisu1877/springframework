@@ -128,6 +128,10 @@ public class MessageController {
 			model.addAttribute("msg", "임시비밀번호 발급실패.");
 			model.addAttribute("url", "member/memIdPwdSearch");
 		}
+		else if(msgFlag.equals("boInputOk")) {
+			model.addAttribute("msg", "게시글 등록이 완료되었습니다.");
+			model.addAttribute("url", "board/boList");
+		}
 		
 		return "include/message";
 	}

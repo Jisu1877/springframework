@@ -222,13 +222,22 @@ public class MemberController {
 	//회원 리스트 호출
 	@RequestMapping(value = "/memList", method = RequestMethod.GET)
 	public String memListGet(Model model,
-			@RequestParam(name="pag", defaultValue = "1", required = false) int pag) {
-		
+			@RequestParam(name="pag", defaultValue = "1", required = false) int pag,
+			@RequestParam(name="pageSize", defaultValue = "5", required = false) int pageSize) {
+		/*
 		PageVO pageVO = pagingProcess.pageProcess("member", pag);
 		List<MemberVO> vos = memberService.getMemList(pageVO.getStartIndexNo(), pageVO.getPageSize());
 		
 		model.addAttribute("vos", vos);
 		model.addAttribute("pageVO", pageVO);
+		*/
+		
+		PageVO pageVO = pagingProcess.pageProcess2(pag, pageSize, "member","","");
+		List<MemberVO> vos = memberService.getMemList(pageVO.getStartIndexNo(), pageSize);
+		
+		model.addAttribute("vos", vos);
+		model.addAttribute("pageVO", pageVO);
+		
 		return "member/memList";
 	}
 	

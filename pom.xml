@@ -214,7 +214,7 @@
 		    <version>5.3.13</version>
 		</dependency>
 		
-		<!-- 파일 업로드를 위한 라이브러리(2개) -->
+		<!-- 파일 업로드를 위한 라이브러리(2개) ckeditor 사용을 위해서도 필요하다. -->
 		<!-- https://mvnrepository.com/artifact/commons-io/commons-io -->
 		<dependency>
 		    <groupId>commons-io</groupId>

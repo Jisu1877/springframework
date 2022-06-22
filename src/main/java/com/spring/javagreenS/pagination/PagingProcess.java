@@ -3,6 +3,7 @@ package com.spring.javagreenS.pagination;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.spring.javagreenS.dao.BoardDAO;
 import com.spring.javagreenS.dao.GuestDAO;
 import com.spring.javagreenS.dao.MemberDAO;
 
@@ -13,6 +14,9 @@ public class PagingProcess {
 	
 	@Autowired
 	MemberDAO memberDAO;
+	
+	@Autowired
+	BoardDAO boardDAO;
 	
 	public PageVO pageProcess(String flag, int pag) {
 		PageVO pageVO = new PageVO();
@@ -42,6 +46,45 @@ public class PagingProcess {
 		pageVO.setBlockSize(blockSize);
 		pageVO.setCurBlock(curBlock);
 		pageVO.setLastBlock(lastBlock);
+		
+		return pageVO;
+	}
+	
+	
+	//선생님 방법
+	// 인자 : 1.pag 번호 2. page크기 3.소속(예:게시판-board) 4.분류 5.검색어
+	public PageVO pageProcess2(int pag, int pageSize, String section, String part, String searchString) {
+		PageVO pageVO = new PageVO();
+		
+		int totRecCnt = 0;
+		int blockSize = 3;
+		//section에 따른 레코드 갯수를 구해오기
+		if(section.equals("member")) {
+			totRecCnt = memberDAO.totRecCnt();
+		}
+		else if(section.equals("guest")) {
+			totRecCnt = guestDAO.totRecCnt();
+		}
+		else if(section.equals("board")) {
+			totRecCnt = boardDAO.totRecCnt();
+		}
+		
+		pageVO.setTotPage((totRecCnt % pageSize) == 0 ? totRecCnt / pageSize : (totRecCnt / pageSize) + 1);
+		int startIndexNo = (pag - 1) * pageSize;
+		int curScrStartNo = totRecCnt - startIndexNo;
+		int curBlock = (pag - 1) / blockSize;
+		int lastBlock = (pageVO.getTotPage() % blockSize) == 0 ? (pageVO.getTotPage() / blockSize) - 1 : (pageVO.getTotPage() / blockSize);
+		
+		
+		pageVO.setPageSize(pageSize);
+		pageVO.setPag(pag);
+		pageVO.setTotRecCnt(totRecCnt);
+		pageVO.setStartIndexNo(startIndexNo);
+		pageVO.setCurScrStartNo(curScrStartNo);
+		pageVO.setBlockSize(blockSize);
+		pageVO.setCurBlock(curBlock);
+		pageVO.setLastBlock(lastBlock);
+		
 		
 		return pageVO;
 	}

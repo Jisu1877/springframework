@@ -35,7 +35,7 @@ public class ProjectSupport {
 		//request 객체 꺼내오기.
 		HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.currentRequestAttributes()).getRequest();
 		//실제로 업로드되는 경로를 찾아오기
-		String uploadPath = request.getSession().getServletContext().getRealPath("/resources/"+flag+"/");
+		String uploadPath = request.getSession().getServletContext().getRealPath("/resources/data/"+flag+"/");
 		//이 경로에 이 파일이름으로 저장할 껍데기 만들기
 		FileOutputStream fos = new FileOutputStream(uploadPath + saveFileName);
 		fos.write(data); //내용물 채우기

@@ -3,13 +3,13 @@ package com.spring.javagreenS.pagination;
 import lombok.Data;
 
 public @Data class PageVO {
-	int pageSize;
-	int totRecCnt;
-	int totPage;
-	int startIndexNo;
-	int curScrStartNo;
-	int blockSize;
-	int curBlock;
-	int lastBlock;
-	int pag;
+	private int pageSize;
+	private int totRecCnt;
+	private int totPage;
+	private int startIndexNo;
+	private int curScrStartNo;
+	private int blockSize;
+	private int curBlock;
+	private int lastBlock;
+	private int pag;
 }
