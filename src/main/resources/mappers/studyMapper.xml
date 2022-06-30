@@ -17,8 +17,17 @@
   	select * from operator2 where oid like concat('%',#{oid},'%') order by oid;
   </select>
   
+  <select id="getPersonList" resultType="com.spring.javagreenS.vo.PersonVO">
+  	select p1.*, p2.* from person p1, personDetail p2 where p1.mid = p2.mid order by idx desc;
+  </select>
+  
   <insert id="setOperatorInputOk">
     insert into operator2 values (#{vo.oid}, #{vo.pwd}, #{vo.name}, #{vo.keyIdx});
+  </insert>
+  
+  <insert id="setPersonInput">
+    insert into person values (default, #{vo.mid}, #{vo.pwd});
+    insert into personDetail values (#{vo.mid}, #{vo.name}, #{vo.age}, #{vo.address});
   </insert>
   
   <delete id="setOperatorDelete">

@@ -32,6 +32,10 @@
 				searchForm.submit();
 			}
 		}
+    	
+    	function searchChange() {
+			document.getElementById("searchString").focus();			
+		}
     </script>
 </head>
 <body>
@@ -73,12 +77,12 @@
 					<c:if test="${vo.replyCount != 0}">
 					[${vo.replyCount}]
 					</c:if>
-					<c:if test="${vo.WNdate <= 24}"><img src="${ctp}/images/new.gif"></c:if>
+					<c:if test="${vo.diffTime <= 24}"><img src="${ctp}/images/new.gif"></c:if>
 				</td>
 				<td>${vo.nickName}</td>
 				<td>
-					<c:if test="${vo.WNdate <= 24}">${fn:substring(vo.WDate, 11, 19)}</c:if>
-					<c:if test="${vo.WNdate > 24}">${fn:substring(vo.WDate, 0, 10)}</c:if>
+					<c:if test="${vo.diffTime <= 24}">${fn:substring(vo.WDate, 11, 19)}</c:if>
+					<c:if test="${vo.diffTime > 24}">${fn:substring(vo.WDate, 0, 10)}</c:if>
 				</td>
 				<td>${vo.readNum}</td>
 				<td>${vo.good}</td>
@@ -93,24 +97,24 @@
 	<div class="text-center">
 		<ul class="pagination justify-content-center pagination-sm">
 		  <c:if test="${pageVO.pag > 1}">
-		  	<li class="page-item"><a class="page-link text-secondary" href="boList?pag=1">◁◁</a></li>
+		  	<li class="page-item"><a class="page-link text-secondary" href="boList?pag=1&pageSize=${pageVO.pageSize}">◁◁</a></li>
 		  </c:if>
 		  <c:if test="${pageVO.curBlock > 0}">
-		  	<li class="page-item"><a class="page-link text-secondary" href="boList?pag=${(pageVO.curBlock-1)*pageVO.blockSize + 1}">◀</a></li>
+		  	<li class="page-item"><a class="page-link text-secondary" href="boList?pag=${(pageVO.curBlock-1)*pageVO.blockSize + 1}&pageSize=${pageVO.pageSize}">◀</a></li>
 		  </c:if>
 		  <c:forEach var="i" begin="${(pageVO.curBlock*pageVO.blockSize)+1}" end="${(pageVO.curBlock*pageVO.blockSize)+pageVO.blockSize}">
 		    <c:if test="${i <= pageVO.totPage && i == pageVO.pag}">
-		      <li class="page-item active"><a class="page-link text-light border-secondary bg-secondary" href="boList?pag=${i}">${i}</a></li>
+		      <li class="page-item active"><a class="page-link text-light border-secondary bg-secondary" href="boList?pag=${i}&pageSize=${pageVO.pageSize}">${i}</a></li>
 		    </c:if>
 		    <c:if test="${i <= pageVO.totPage && i != pageVO.pag}">
-		      <li class="page-item"><a class="page-link text-secondary" href='boList?pag=${i}'>${i}</a></li>
+		      <li class="page-item"><a class="page-link text-secondary" href='boList?pag=${i}&pageSize=${pageVO.pageSize}'>${i}</a></li>
 		    </c:if>
 		  </c:forEach>
 		  <c:if test="${pageVO.curBlock < pageVO.lastBlock}">
-		     <li class="page-item"><a class="page-link text-secondary" href="boList?pag=${(pageVO.curBlock+1)*pageVO.blockSize + 1}">▶</a></li>
+		     <li class="page-item"><a class="page-link text-secondary" href="boList?pag=${(pageVO.curBlock+1)*pageVO.blockSize + 1}&pageSize=${pageVO.pageSize}">▶</a></li>
 		  </c:if>
 		  <c:if test="${pageVO.pag != pageVO.totPage}">
-			 <li class="page-item"><a class="page-link text-secondary" href="boList?pag=${pageVO.totPage}">▷▷</a></li>
+			 <li class="page-item"><a class="page-link text-secondary" href="boList?pag=${pageVO.totPage}&pageSize=${pageVO.pageSize}">▷▷</a></li>
 		  </c:if> 
 		 </ul>
 	</div>
@@ -119,7 +123,7 @@
 <br>
 <!-- 검색기 처리 시작  -->
 <div class="container text-center">
-	<form name="searchForm" method="post" action="boSearch.bo">
+	<form name="searchForm" method="post" action="boSearch">
 		<b>검색 : </b>
 		<select name="search" onchange="searchChange()">
 			<option value="title">글제목</option>

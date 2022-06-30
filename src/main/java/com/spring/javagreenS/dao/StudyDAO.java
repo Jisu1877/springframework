@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.apache.ibatis.annotations.Param;
 
 import com.spring.javagreenS.vo.OperatorVO;
+import com.spring.javagreenS.vo.PersonVO;
 
 public interface StudyDAO {
 	
@@ -25,5 +26,9 @@ public interface StudyDAO {
 	
 	//일부검색
 	public ArrayList<OperatorVO> getOperatorSearch(@Param("oid") String oid);
+
+	public void setPersonInput(@Param("vo") PersonVO vo);
+
+	public ArrayList<PersonVO> getPersonList();
 	
 }

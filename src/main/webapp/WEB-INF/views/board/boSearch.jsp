@@ -15,7 +15,7 @@
 <p><br/><p>
 <div class="container">
 	<h2 class="text-center">게 시 판 검 색 리 스 트</h2>
-	<div class="text-center">(<font color="blue">${searchTitle}</font>(으)로 <font color="blue">${searchString}(을)를 검색한 결과 </font><font color="red">${searchCount}</font>건이 검색되었습니다.)</div>
+	<div class="text-center">(<font color="blue">${searchTitle}</font>(으)로 <font color="blue">'${searchString}'(을)를 검색한 결과 </font><font color="red">${pageVO.totRecCnt}</font>건이 검색되었습니다.)</div>
 	<br>
 	<table class="table table-hover">
 		<tr class="table-dark text-dark">
@@ -30,12 +30,12 @@
 			<tr>
 				<td>${st.count}</td>
 				<td class="text-left"><a href="boContent.bo?idx=${vo.idx}&pag=${pag}&pageSize=${pageSize}&flag=s&search=${search}&searchString=${searchString}">${vo.title}</a>
-					<c:if test="${vo.wNdate <= 24}"><img src="images/new.gif"></c:if>
+					<c:if test="${vo.diffTime <= 24}"><img src="${ctp}/images/new.gif"></c:if>
 				</td>
 				<td>${vo.nickName}</td>
 				<td>
-					<c:if test="${vo.wNdate <= 24}">${fn:substring(vo.wDate, 11, 19)}</c:if>
-					<c:if test="${vo.wNdate > 24}">${fn:substring(vo.wDate, 0, 10)}</c:if>
+					<c:if test="${vo.diffTime <= 24}">${fn:substring(vo.WDate, 11, 19)}</c:if>
+					<c:if test="${vo.diffTime > 24}">${fn:substring(vo.WDate, 0, 10)}</c:if>
 				</td>
 				<td>${vo.readNum}</td>
 				<td>${vo.good}</td>
@@ -44,7 +44,7 @@
 		<tr><td colspan="6" class="p-0"></td></tr>
 	</table>
 	<div class="text-center">
-	<input type="button" value="돌아가기" onclick="location.href='${ctp}/boList.bo?pag=${pag}&pageSize=${pageSize}';" class="btn btn-secondary"/>
+	<input type="button" value="돌아가기" onclick="location.href='${ctp}/board/boList?pag=${pag}&pageSize=${pageSize}';" class="btn btn-secondary"/>
 	</div>
 </div>
 <br>

@@ -228,7 +228,14 @@
 		    <version>1.3.3</version>
 		</dependency>
 		
-		
+		<!-- 트랜잭션을 사용하기위한 라이브러리주입(버전이 중요하다.) -->
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-tx -->
+		<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-tx</artifactId>
+		    <version>4.3.14.RELEASE</version>
+		    <!-- <version>${org.springframework-version}</version> 이렇게 작성해도 자신의 스프링 버전으로 설정됨. -->
+		</dependency>
 		
 	</dependencies>
     <build>

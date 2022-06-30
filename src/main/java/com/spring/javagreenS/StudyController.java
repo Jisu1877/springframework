@@ -25,6 +25,7 @@ import com.spring.javagreenS.common.ARIAUtil;
 import com.spring.javagreenS.service.StudyService;
 import com.spring.javagreenS.vo.MailVO;
 import com.spring.javagreenS.vo.OperatorVO;
+import com.spring.javagreenS.vo.PersonVO;
 
 @Controller
 @RequestMapping("/study")
@@ -293,7 +294,7 @@ public class StudyController {
 			
 			//메세지 보관함의 내용을 편집해서 다시 보관함에 담아둔다.
 			content = content.replace("\n", "<br>");
-			content += "<br><hr><h3></h3>지수가 보냅니다.</h3></hr><br>";
+			content += "<br><hr><h3>지수가 보냅니다.</h3></hr><br>";
 			content += "<p><img src=\"cid:main.jpg\"></p><hr>";
 			content += "<p>방문하기 : <a href='http://49.142.157.251:9090/cjgreen'>javagreenJ사이트</a></p>";
 			content += "<hr>";
@@ -345,5 +346,24 @@ public class StudyController {
 		}
 	}
 	
+	//트랜잭션 연습을 취한 person폼 불러오기
+	@RequestMapping(value = "/personInput", method = RequestMethod.GET)
+	public String personInputGet() {
+		return "study/transaction/personInput";
+	}
 	
+	@RequestMapping(value = "/personInput", method = RequestMethod.POST)
+	public String personInputPost(PersonVO vo) {
+		studyService.setPersonInput(vo);
+		
+		return "redirect:/msg/personInputOk";
+	}
+	
+	@RequestMapping(value = "/personList", method = RequestMethod.GET)
+	public String personListGet(Model model) {
+		ArrayList<PersonVO> vos = studyService.getPersonList();
+		model.addAttribute("vos", vos);
+		
+		return "study/transaction/personList";
+	}
 }

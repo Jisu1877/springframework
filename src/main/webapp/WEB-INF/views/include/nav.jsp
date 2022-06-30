@@ -17,7 +17,7 @@
     <a href="${ctp}/guest/guestList" class="w3-bar-item w3-button w3-padding-large w3-hide-small">GUEST</a>
     <c:if test="${sLevel <= 4}">
 	    <a href="${ctp}/board/boList" class="w3-bar-item w3-button w3-padding-large w3-hide-small">BOARD</a>
-	    <a href="#contact" class="w3-bar-item w3-button w3-padding-large w3-hide-small">PDS</a>
+	    <a href="${ctp}/pds/pdsList" class="w3-bar-item w3-button w3-padding-large w3-hide-small">PDS</a>
 	    <div class="w3-dropdown-hover w3-hide-small">
 	      <button class="w3-padding-large w3-button" title="More">STUDY1 <i class="fa fa-caret-down"></i></button>     
 	      <div class="w3-dropdown-content w3-bar-block w3-card-4">
@@ -34,6 +34,7 @@
 	      <button class="w3-padding-large w3-button" title="More">STUDY2 <i class="fa fa-caret-down"></i></button>     
 	      <div class="w3-dropdown-content w3-bar-block w3-card-4">
 	        <a href="${ctp}/study/fileUpload/fileUpload" class="w3-bar-item w3-button">파일업로드연습</a>
+	        <a href="${ctp}/study/personInput" class="w3-bar-item w3-button">트랜잭션연습</a>
 	      </div>
 	    </div>
 	    <div class="w3-dropdown-hover w3-hide-small">

@@ -15,15 +15,11 @@ public @Data class BoardVO {
 	private int good;
 	private String mid;
 	
-	// 날짜형식필드를 '문자'와 '숫자'로 저장시켜주기 위한 변수를 선언
-	private String wCdate;
-	private int wNdate;
+	//날짜 차이를 저장해주는 변수
+	private int diffTime;
 	
-	// '이전글', '다음글'을 위한 변수설정
-	private int preIdx;
-	private int nextIdx;
-	private String preTitle;
-	private String nextTitle;
+	//기존 contentd의 내용을 담기 위한 변수
+	private String oriContent;
 	
 	//댓글의 개수를 저장하기 위한 변수
 	private int replyCount;

@@ -9,12 +9,14 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.javagreenS.dao.StudyDAO;
 import com.spring.javagreenS.vo.OperatorVO;
+import com.spring.javagreenS.vo.PersonVO;
 
 @Service
 public class StudyServiceImpl implements StudyService {
@@ -251,5 +253,16 @@ public class StudyServiceImpl implements StudyService {
 		FileOutputStream fos = new FileOutputStream(uploadPath + saveFileName);
 		fos.write(data); //내용물 채우기
 		fos.close();
+	}
+	
+	@Transactional
+	@Override
+	public void setPersonInput(PersonVO vo) {
+		studyDAO.setPersonInput(vo);
+	}
+
+	@Override
+	public ArrayList<PersonVO> getPersonList() {
+		return studyDAO.getPersonList();
 	}
 }

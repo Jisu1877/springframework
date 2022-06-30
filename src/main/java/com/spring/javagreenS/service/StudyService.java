@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.spring.javagreenS.vo.OperatorVO;
+import com.spring.javagreenS.vo.PersonVO;
 
 public interface StudyService {
 	
@@ -35,5 +36,9 @@ public interface StudyService {
 	
 	//파일 업로드
 	public int fileUpload(MultipartFile fName);
+
+	public void setPersonInput(PersonVO vo);
+
+	public ArrayList<PersonVO> getPersonList();
 
 }

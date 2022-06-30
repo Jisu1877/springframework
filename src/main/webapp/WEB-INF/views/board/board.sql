@@ -27,14 +27,58 @@ select * from board2 where idx = 20 + 1;
 select * from board2 where idx > 5 limit 1; /* 다음글 */
 select * from board2 where idx < 5 order by idx desc limit 1; /* 이전글 */
 
+select idx,title from board2 where idx in (
+			(select idx from board2 where idx > 5 limit 1),
+			(select idx from board2 where idx < 5 order by idx desc limit 1)
+);
+
+select idx,title from board2 where idx in (
+			(select idx from board2 where idx < 5 order by idx desc limit 1),
+			(select idx from board2 where idx > 5 limit 1)
+);
+
+
 
 /* 최근글 출력연습 */
 select * from board2 where date_sub(now(), interval 1 month) < wDate order by idx desc;
 select count(*) from board2 where date_sub(now(), interval 1 day) < wDate;
 select * from board2 where 1 > 2; /*where절 이하가 false가 되어서 데이터가 select되지 않는다.*/
 
+/*
+	DATEDIFF(날짜1, 날짜2) : '날짜1 - 날짜2'의 결과를 반환한다.
+	TIMESTAMPDIFF(단위, 날짜1, 날짜2) : '날짜2 - 날짜1'의 결과를 반환한다. 
+	  단위 : YEAR(년도 차이) / QUARTER(분기 차이) / MONTH(월 차이) / WEEK(주 차이) / DAY(일 차이) / HOUR(시) / MINUTE(분) / SECOND(초)
+	
+	-> 결과를 숫자로 반환한다.
+*/
 
-/* 
+select datediff('2022-06-22', '2022-06-01');
+select datediff(now(), '2022-06-01');
+
+/* date_add와 date_sub : 결과를 날짜로 반환  */
+select date_add(now(), interval 1 day);
+select date_sub(now(), interval 1 day);
+
+select * from board order by idx desc;
+/*날짜로 비교해서 오늘(interval 0 day) 올린 것, 어제부터(interval 1 day) 올린 것 등을 구해올 수 있다.*/
+select * from board where wDate > date_sub(now(), interval 2 day) order by idx desc;
+
+select timestampdiff(YEAR, '2022-06-23', '2022-06-22');
+select timestampdiff(MONTH, '2022-05-23', '2022-06-27');
+select timestampdiff(MONTH, '2022-05-23', now());
+select timestampdiff(DAY, '2022-05-22', now());
+select timestampdiff(DAY, '2022-06-22', now());
+select timestampdiff(HOUR, '2022-06-22', now());
+select timestampdiff(HOUR, '2022-06-22', now()) / 24;
+select timestampdiff(MINUTE, '2022-06-22', now());
+select timestampdiff(MINUTE, '2022-06-22', now());
+select timestampdiff(MINUTE, '2022-06-22', now()) / 60;
+select timestampdiff(MINUTE, '2022-06-22', now()) / (60 * 24);
+
+select *, (TIMESTAMPDIFF(MINUTE, wDate, now()) / 60) AS diffTime  from board2;
+select *, cast(TIMESTAMPDIFF(MINUTE, wDate, now()) / 60 as signed integer) AS diffTime  from board2;
+ 
+ /* 
  외래키(foreign key) : 서로다른 테이블간의 연관관계를 맺어주기위한 키
  		: 외래키를 설정하려면, 설정하려는 외래키는 다른테이블의 주키(Primary key)이어야 한다.
  		  즉, 외래키로 지정하는 필드는, 해당테이블의 속성과 똑 같아야 한다.(필드명은 달라도 된다.)
@@ -49,15 +93,18 @@ create table boardReply2 (
 	wDate		datetime default now(),			/* 댓글쓴 날짜 */
 	hostIp 		varchar(50) not null,			/* 댓글쓴 PC의 IP */
 	content 	text not null,					/* 댓글 내용 */
+	level		int not null default 0,			/* 댓글레벨 - 부모댓글의 레벨은 0 */
+	levelOrder 	int not null default 0,			/* 댓글의 순서 - 부모댓글의 levelOrder는 0 */
 	primary key(idx),				   			/* 주키(기본키)는 idx */
-	foreign key(boardIdx) references board(idx) /*board테블의 idx를 boardReply2테이블의 외래키(boardIdx)로 설정 */
-	on update cascade 				   /* 원본테이블에서의 주키의 변경의 영향을 받는다. */
-	on delete restrict				   /* 원본테이블에서의 주키를 삭제시키지 못하게 한다.(삭제시는 에러발생하고 원본키를 삭제하지 못함)  게시글에 댓글이 달려있으면 게시글을 못지움. 해당 댓글을 먼저 지우고 게시글을 지워야한다.*/
+	foreign key(boardIdx) references board2(idx) /*board테블의 idx를 boardReply2테이블의 외래키(boardIdx)로 설정 */
+	/* on update cascade 				    원본테이블에서의 주키의 변경의 영향을 받는다. */
+	/* on delete restrict				    원본테이블에서의 주키를 삭제시키지 못하게 한다.(삭제시는 에러발생하고 원본키를 삭제하지 못함)  게시글에 댓글이 달려있으면 게시글을 못지움. 해당 댓글을 먼저 지우고 게시글을 지워야한다.*/
 );
 
 
 drop table boardReply2;
 
+desc boardReply2;
 
 /* 
  - 테이블 설계시 제약조건(필드에 대한 제한) - constraint
